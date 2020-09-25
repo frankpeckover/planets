@@ -1,22 +1,32 @@
-class PhysicalProperties():
-    def __init__(self, xPos, yPos, mass, xVel, yVel, xAcc, yAcc):
-        self.xPos = xPos
-        self.yPos = yPos
-        self.mass = mass
+class PhysicalProperty():
+    def __init__(self, x, y, z):
+        self.x = x
+        self.y = y
+        self.z = z
 
-        self.xVel = xVel
-        self.yVel = yVel
-        self.xAcc = xAcc
-        self.yAcc = yAcc
+class Position(PhysicalProperty):
+    def __init__(self, x, y, z):
+        super().__init__(x, y, z)
 
-    def changeAcceleration(self, xForce, yForce):
-        self.xAcc = xForce / mass
-        self.yAcc = yForce / mass
+    def update(self, xVel, yVel, zVel, deltaTime):
+        self.x = self.x + (xVel * deltaTime)
+        self.y = self.y + (yVel * deltaTime)
+        self.z = self.z + (zVel * deltaTime)
 
-    def updateVelocity(self, deltaTime):
-        self.xVel = xVel + xAcc * deltaTime
-        self.yVel = yVel + yAcc * deltaTime
+class Velocity(PhysicalProperty):
+    def __init__(self, x, y, z):
+        super().__init__(x, y, z)
 
-    def updatePosition(self, deltaTime):
-        self.xPos = xPos + xVel * deltaTime
-        self.yPos = yPos + yVel * deltaTime
+    def update(self, xAcc, yAcc, zAcc, deltaTime):
+        self.x = self.x + (xAcc * deltaTime)
+        self.y = self.y + (yAcc * deltaTime)
+        self.z = self.z + (zAcc * deltaTime)
+
+class Acceleration(PhysicalProperty):
+    def __init__(self, x, y, z):
+        super().__init__(x, y, z)
+
+    def update(self, xForce, yForce, zForce, mass):
+        self.x = self.x + (xForce / mass)
+        self.y = self.y + (yForce / mass)
+        self.z = self.z + (zForce / mass)
