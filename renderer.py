@@ -1,36 +1,20 @@
-from matplotlib import pyplot as plt
-from mpl_toolkits import mplot3d
-from mpl_toolkits.mplot3d import Axes3D
-from matplotlib import animation
+from vpython import *
+import time
 
-plt.ion()
-figure = plt.figure(figsize=(16, 8))
-axis = Axes3D(figure)
-axis.axis('off')
-axis.set_xlim3d(-1000, 1000)
-axis.set_ylim3d(-1000, 1000)
-axis.set_zlim3d(-1000, 1000)
-axis.set_frame_on(False)
-plt.show()
+visuals = []
+loop = False
 
-#ani = animation.FuncAnimation(figure, update, gen)
+def create(bodies):
+    data = bodies
+    scene = canvas(width = 1920 * 0.75, height = 1080 * 0.75, center = vector(0,0,0))
+    for body in data:
+        newBody = sphere(canvas=scene, pos=vector(body.position.x, body.position.y, body.position.z), radius=body.radius, color=color.red)
+        visuals.append(newBody) 
+    scene.camera.follow(visuals[0])
 
-
-def plotBodies(bodies):
-    x = []
-    y = []
-    z = []
-    n = []
-    r = []
-
-    for body in bodies:
-        x.append(body.position.x)
-        y.append(body.position.y)
-        z.append(body.position.z)
-        n.append(body.name)
-        r.append(body.radius)
-
-    axis.clear()
-    axis.scatter(x, y, z, s=r)
-    axis.axis('off')
-    plt.pause(0.008)
+def update(bodies):
+    for i in range(len(bodies)):
+        visuals[i].pos.x = bodies[i].position.x
+        visuals[i].pos.y = bodies[i].position.y
+        visuals[i].pos.z = bodies[i].position.z
+    time.sleep(0.08)
