@@ -37,3 +37,11 @@ class Body():
         yForce = magnitude * dist["unitVector"][1]
         zForce = magnitude * dist["unitVector"][2]
         return {"magnitude": magnitude, "xForce": xForce, "yForce": yForce, "zForce": zForce}
+
+    def hasCollided(self, other):
+        if (other.position.x < self.position.x + self.radius and other.position.x > self.position.x - self.radius):
+            if (other.position.y < self.position.y + self.radius and other.position.y > self.position.y - self.radius):
+                if (other.position.z < self.position.z + self.radius and other.position.z > self.position.z - self.radius):
+                    return True
+        else:
+            return False
