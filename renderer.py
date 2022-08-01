@@ -1,27 +1,45 @@
-from vpython import *
-import time
+import matplotlib.pyplot as plt
 
 class Renderer():
     def __init__(self):
-        self.visuals = []
-        self.bodies = []
-        self.scene = canvas(width = 1920 * 0.9, height = 1080 * 0.9, center = vector(0,0,0), background = color.black)
+        plt.ion()
+        self.figure = plt.figure()
+        self.ax = plt.axes(projection='3d')
+        self.ax.view_init(30, 145)
+        plt.title('Orbitals')
+        self.figure.tight_layout()
 
-    def setBodies(self, bodies):
-        self.bodies = bodies
-        return True
+        #Set fullscreen
+        #manager = plt.get_current_fig_manager()
+        #manager.full_screen_toggle()
+        
+        plt.show()
 
-    def initialise(self):
-        self.visuals = []
-        for obj in scene.objects:
-            del obj
-        for body in self.bodies:
-            newBody = sphere(canvas=self.scene, pos=vector(body.position.x, body.position.y, body.position.z), radius=body.radius, color=color.red)
-            self.visuals.append(newBody)
-        self.scene.autoscale = False
+        self.scale = 4
 
-    def update(self):
-        for i in range(len(self.bodies)):
-            self.visuals[i].pos.x = self.bodies[i].position.x
-            self.visuals[i].pos.y = self.bodies[i].position.y
-            self.visuals[i].pos.z = self.bodies[i].position.z
+        self.prevX = (-10**self.scale, 10**self.scale)
+        self.prevY = (-10**self.scale, 10**self.scale)
+        self.prevZ = (-10**self.scale, 10**self.scale)
+
+        self.configureAxes()
+
+    def configureAxes(self):
+        plt.axis('off')
+        self.ax.set_xlim(self.prevX)
+        self.ax.set_ylim(self.prevY)
+        self.ax.set_zlim(self.prevZ)
+        self.ax.set_facecolor('black')
+
+    def render(self, solarSystem):
+        self.prevX = self.ax.get_xlim()
+        self.prevY = self.ax.get_ylim()
+        self.prevZ = self.ax.get_zlim()
+        self.ax.clear()
+        for body in solarSystem.bodies:
+            self.ax.plot(body.position.x, body.position.y, body.position.z, marker='o', color=body.color, markersize=body.radius, label=body.name)
+            self.ax.plot(body.xhistory[-100:], body.yhistory[-100:], body.zhistory[-100:], color=body.color)
+        self.configureAxes()
+        
+        
+        self.figure.canvas.draw()
+        self.figure.canvas.flush_events()

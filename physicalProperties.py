@@ -7,26 +7,23 @@ class PhysicalProperty():
     def __repr__(self):
         return("x: {x} y: {y} z: {z}".format(x=self.x, y=self.y, z=self.z))
 
-
 class Position(PhysicalProperty):
     def __init__(self, x, y, z):
         super().__init__(x, y, z)
 
-    def update(self, xVel, yVel, zVel, deltaTime):
-        self.x += (xVel * deltaTime)
-        self.y += (yVel * deltaTime)
-        self.z += (zVel * deltaTime)
-
+    def update(self, xVel, yVel, zVel, SecondsPerFrame):
+        self.x += (xVel * SecondsPerFrame)
+        self.y += (yVel * SecondsPerFrame)
+        self.z += (zVel * SecondsPerFrame)
 
 class Velocity(PhysicalProperty):
     def __init__(self, x, y, z):
         super().__init__(x, y, z)
 
-    def update(self, xAcc, yAcc, zAcc, deltaTime):
-        self.x += (xAcc * deltaTime)
-        self.y += (yAcc * deltaTime)
-        self.z += (zAcc * deltaTime)
-
+    def update(self, xAcc, yAcc, zAcc, SecondsPerFrame):
+        self.x += (xAcc * SecondsPerFrame)
+        self.y += (yAcc * SecondsPerFrame)
+        self.z += (zAcc * SecondsPerFrame)
 
 class Acceleration(PhysicalProperty):
     def __init__(self, x, y, z):
@@ -36,7 +33,6 @@ class Acceleration(PhysicalProperty):
         self.x = (xForce / mass)
         self.y = (yForce / mass)
         self.z = (zForce / mass)
-
 
 class Force(PhysicalProperty):
     def __init__(self, x, y, z):

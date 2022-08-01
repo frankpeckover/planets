@@ -1,9 +1,7 @@
-import math
 GRAVITY_CONST = 6.67408e-11
 
-
 class Body():
-    def __init__(self, name, mass, radius, position, velocity, acceleration, force):
+    def __init__(self, name, mass, radius, position, velocity, acceleration, force, color):
         self.name = name
         self.mass = mass
         self.radius = radius
@@ -11,14 +9,21 @@ class Body():
         self.velocity = velocity
         self.acceleration = acceleration
         self.force = force
+        self.color=color
+        self.xhistory = []
+        self.yhistory = []
+        self.zhistory = []
 
-    def update(self, deltaTime):
+    def update(self, secondsPerFrame):
+        self.xhistory.append(self.position.x)
+        self.yhistory.append(self.position.y)
+        self.zhistory.append(self.position.z)
         self.acceleration.update(
             self.force.x, self.force.y, self.force.z, self.mass)
         self.velocity.update(
-            self.acceleration.x, self.acceleration.y, self.acceleration.z, deltaTime)
+            self.acceleration.x, self.acceleration.y, self.acceleration.z, secondsPerFrame)
         self.position.update(self.velocity.x, self.velocity.y,
-                             self.velocity.z, deltaTime)
+                             self.velocity.z, secondsPerFrame)
 
     def getDistance(self, other):
         xDist = self.position.x - other.position.x
